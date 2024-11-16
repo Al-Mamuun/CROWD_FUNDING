@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome</title>
+  <style>
+    /* Full-page splash screen styling */
+    body, html {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #333;
+      font-family: Arial, sans-serif;
+    }
+
+    .splash-container {
+      text-align: center;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: url("{% static 'images/CF.jpg' %}") no-repeat center center fixed;
+      background-size: cover;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .message {
+      font-size: 2rem;
+      background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+      padding: 20px;
+      border-radius: 10px;
+      animation: fadeInOut 5s ease-in-out infinite;
+    }
+
+    /* Fade-in, fade-out animation */
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="splash-container">
+    <div class="message">Welcome to our Crowdfunding Platform!</div>
+  </div>
+
+  <script>
+    // Redirect to the home page after 5 seconds
+    setTimeout(() => {
+      window.location.href = "{% url 'home' %}"; // Django URL to home page
+    }, 5000);
+  </script>
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome</title>
+  <style>
+    /* Full-page splash screen styling */
+    body, html {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #333;
+      font-family: Arial, sans-serif;
+    }
+
+    .splash-container {
+      text-align: center;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: url("{% static 'images/disaster.jpg' %}") no-repeat center center fixed;
+      background-size: cover;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .message {
+      font-size: 2rem;
+      background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .continue-btn {
+      font-size: 1.2rem;
+      padding: 10px 20px;
+      background-color: #ff7ce2;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .continue-btn:hover {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="splash-container">
+    <div class="message">Welcome to our Crowdfunding Platform!</div>
+    <button class="continue-btn" onclick="goToHome()">Continue to Home</button>
+  </div>
+
+  <script>
+    // Redirect to the home page when button is clicked
+    function goToHome() {
+      window.location.href = "{% url 'home' %}"; // Django URL to home page
+    }
+  </script>
+</body>
+</html> -->
