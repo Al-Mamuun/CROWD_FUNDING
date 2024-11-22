@@ -1,6 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, Group, Permission
-from django.contrib.auth.models import User
 
 
 class Project(models.Model):
@@ -53,17 +51,6 @@ class Report(models.Model):
     def __str__(self):
         return f"Report for {self.project.title} - {self.reportReason[:30]}"
 
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    mobile = models.CharField(max_length=15, blank=True)
-    country = models.CharField(max_length=30, blank=True)
-    birthday = models.DateField(null=True, blank=True)
-
-    def __str__(self):
-        return f"{self.first_name} {self.last_name} - {self.user.username}"
 
 
 class FeatureProject(models.Model):

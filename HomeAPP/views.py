@@ -1,169 +1,169 @@
-from pyexpat.errors import messages
-from django.shortcuts import render, redirect,HttpResponse,get_object_or_404
-from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import Profile
-from .forms import SignUpForm
-from django.contrib.auth import login
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth.decorators import login_required
 from .forms import *
-from django.db.models import Q
-def signup(request):
-    if request.method == "POST":
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
-        phone_number = request.POST.get('phone_number')
 
-        if password == confirm_password:  # Check if passwords match
-            user = User.objects.create_user(
-                username=email,  # Using email as username
-                email=email,
-                password=password,
-                first_name=first_name,
-                last_name=last_name
-            )
-            # Create the user profile
-            Profile.objects.create(user=user, mobile=phone_number)
-            login(request, user)  # Log in the user
-            return redirect('profile')  # Redirect to the profile page
-        else:
-            return render(request, 'signup/signup.html', {'error': 'Passwords do not match'})
-
-    return render(request, 'signup/signup.html')
-
-# Create your views here.
+# Home Page (Requires Login)
 
 def home(request):
-    return render(request, template_name='Home/home.html')
+    return render(request, template_name="home/home.html")
 
-def signin(request):
-    return render(request, template_name='Signin/signin.html')
-
-
-def signup(request):
-    return render(request, template_name='signup/signup.html')
-
+# Reset Page
 def reset(request):
     return render(request, template_name='reset/reset.html')
 
-from django.shortcuts import render
-from .models import Project
-
+# List All Projects
 def project_list(request):
     projects = Project.objects.all()
-    return render(request, 'Project/project_list.html', {'projects': projects})
+    return render(request, 'project/project_list.html', {'projects': projects})
 
-from django.shortcuts import render, get_object_or_404
-from .models import Project
-
+# Project Details
 def details(request, id):
-    # Option 1: Using get_object_or_404 for cleaner code
     project = get_object_or_404(Project, pk=id)
-
     return render(request, 'project/details.html', {'project': project})
 
-
-
-
+# List Featured Projects
 def featureprojectlist(request):
     projects = FeatureProject.objects.all()
-    return render(request, 'Project/featureprojectlist.html', {'projects': projects})
+    return render(request, 'project/featureprojectlist.html', {'projects': projects})
 
+# Featured Project Details
 def details_featureprojectlist(request, id):
-    try:
-        project = FeatureProject.objects.get(pk=id)
-    except FeatureProject.DoesNotExist:
-        # Handle the error gracefully, for example:
-        return render(request, '404.html', {'message': 'Project not found'})  # Or redirect to another page
-    return render (request,'Project/Featuredetails.html', {'project': project})
+    project = get_object_or_404(FeatureProject, pk=id)
+    return render(request, 'project/Featuredetails.html', {'project': project})
 
-def signin(request):
-    if request.method == "POST":
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        user = authenticate(request, username=email, password=password)
 
-        if user is not None:
-            login(request, user)
-            # If the profile does not exist, create it
-            Profile.objects.get_or_create(user=user)
-            return redirect('profile')  # Redirect to the profile page
-        else:
-            # Invalid credentials handling
-            return render(request, 'SignIn/signin.html', {'error': 'Invalid credentials'})
-
-    return render(request, 'SignIn/signin.html')
-
-def profile(request):
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user=request.user)
-        return render(request, 'profile/profile.html', {'profile': profile})
-    return redirect('signin')  # Redirect to sign-in if not authenticated
-
-def Upload_project(request):
+# Upload a New Project
+def upload_project(request):
     form = ProjectForm()
     if request.method == 'POST':
         form = ProjectForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            messages.success(request, "Project uploaded successfully!")
             return redirect('project_list')
-    return render(request, 'Project/upload_project.html', {'form': form})
+    return render(request, 'project/upload_project.html', {'form': form})
 
-def update_project(request,id):
-    update = Project.objects.get(pk = id)
+# Update Existing Project
+def update_project(request, id):
+    update = get_object_or_404(Project, pk=id)
     form = ProjectForm(instance=update)
     if request.method == 'POST':
-        form = ProjectForm(request.POST, request.FILES,instance=update)
+        form = ProjectForm(request.POST, request.FILES, instance=update)
         if form.is_valid():
             form.save()
+            messages.success(request, "Project updated successfully!")
             return redirect('project_list')
-    return render(request, 'Project/update_project.html', {'form': form})
+    return render(request, 'project/update_project.html', {'form': form})
 
-def delete_p(request,id):
-    delete = Project.objects.get(pk = id)
+# Delete Project
+def delete_p(request, id):
+    project = get_object_or_404(Project, pk=id)
     if request.method == 'POST':
-            delete.save()
-            return redirect('project_list')
-    return render(request, 'Project/delete.html')
+        project.delete()
+        messages.success(request, "Project deleted successfully!")
+        return redirect('project_list')
+    return render(request, 'project/delete.html')
 
-
-
-def Mamun(request):
-    return render(request, template_name='Home/splash.html')
-
-# Handle donations
-
-def donate_to_project(request, project_id):
-    project = get_object_or_404(Project, id=project_id)
-    
+# Donate to a Project
+def donate_to_project(request, id):
+    project = get_object_or_404(Project, id=id)
     if request.method == 'POST':
-        # Ensure amount is being passed as a number (float or int)
         try:
             amount = float(request.POST.get('amount'))
             if amount > 0:
-                project.collectedAmount += amount  # Add the donation amount to the current total
-                project.save()  # Save the project with the updated amount
+                project.collectedAmount += amount
+                project.save()
+                messages.success(request, "Thank you for your donation!")
+            else:
+                messages.error(request, "Please enter a valid amount.")
         except (ValueError, TypeError):
-            # Handle invalid input, e.g., non-numeric or empty input
-            pass
-
-        # After donation, redirect to the project detail page or wherever you want
+            messages.error(request, "Invalid amount entered.")
         return redirect('details', id=project.id)
-    
-    return redirect('details', id=project.id)  # Redirect for non-POST requests
+    return redirect('details', id=project.id)
 
-def comment_on_project(request, project_id):
-    project = get_object_or_404(Project, id=project_id)
+# Comment on a Project
+def comment_on_project(request, id):
+    project = get_object_or_404(Project, id=id)
     if request.method == 'POST':
         content = request.POST.get('content')
-        Comment.objects.create(project=project, content=content)
+        if content:
+            Comment.objects.create(project=project, content=content)
+            messages.success(request, "Comment added!")
+        else:
+            messages.error(request, "Comment cannot be empty.")
         return redirect('details', id=project.id)
 
-def rate_project(request, project_id):
-    project = get_object_or_404(Project, id=project_id)
+# Rate a Project
+def rate_project(request, id):
+    project = get_object_or_404(Project, id=id)
     if request.method == 'POST':
-        stars = request.POST.get('stars')
-        Rating.objects.create(project=project, stars=stars)
+        try:
+            stars = int(request.POST.get('stars'))
+            if 1 <= stars <= 5:
+                Rating.objects.create(project=project, stars=stars)
+                messages.success(request, "Rating submitted successfully!")
+            else:
+                messages.error(request, "Rating must be between 1 and 5.")
+        except (ValueError, TypeError):
+            messages.error(request, "Invalid rating value.")
         return redirect('details', id=project.id)
+
+def signin(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # Debug: Print the submitted data
+        print(f"Username: {username}, Password: {password}")
+
+        # Authenticate user
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            # Log the user in and remember them if the checkbox is checked
+            auth_login(request, user)
+            
+            # Optionally, handle "Remember me"
+            if 'rememberMe' in request.POST:
+                request.session.set_expiry(1209600)  # Keep session for two weeks
+
+            messages.success(request, f"Welcome, {username}!")
+            # return redirect('home')  # Redirect to home page
+            return redirect('home')
+        else:
+            messages.error(request, "Invalid username or password.")
+            return redirect('signin')  # Redirect back to the sign-in page if failed
+
+    return render(request, "SignIn/signin.html")
+
+# User Sign-Up
+def signup(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+
+        # Check if the passwords match
+        if password1 != password2:
+            messages.error(request, "Passwords do not match.")
+            return redirect('signup')
+        
+        # Check if the username already exists
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username already exists.")
+            return redirect('signup')
+
+        # Create the user
+        User.objects.create_user(username=username,first_name=first_name,last_name=last_name, email=email, password=password1)
+        messages.success(request, "Account created successfully! You can now log in.")
+        return redirect('signin')
+    
+    return render(request, "signup/signup.html")
+
+

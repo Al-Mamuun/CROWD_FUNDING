@@ -152,13 +152,13 @@ p {
 
     <a href="{% url 'project_list' %}" class="back-link">← Back to Project List</a>
     <a href="{% url 'update' project.id %}" class="update-button">Update Project</a>
-    <a href="{% url 'delete_p' project.id %}" class="danger-btn">Delete</a>
+    <a href="{% url 'delete' project.id %}" class="danger-btn">Delete</a>
 </div>
 
 <!-- Donation Section -->
 <div class="card-container">
     <h3>Donate to this Project</h3>
-    <form method="post" action="{% url 'donate_to_project' project_id=project.id %}">
+    <form method="post" action="{% url 'donate_to_project' id=project.id %}">
         {% csrf_token %}
         <input type="number" name="amount" placeholder="Enter donation amount" required>
         <button type="submit">Donate</button>

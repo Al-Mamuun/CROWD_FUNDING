@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Project, Donation, Rating, Comment, Report,FeatureProject
+from .models import Project, Donation, Rating, Comment, Report,FeatureProject
 
 admin.site.register(Project)
 admin.site.register(Donation)
