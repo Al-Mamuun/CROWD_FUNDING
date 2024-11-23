@@ -16,6 +16,7 @@ urlpatterns = [
     path('projects/<int:id>/donate/', views.donate_to_project, name='donate_to_project'),
     path('projects/<int:id>/comment/', views.comment_on_project, name='comment_on_project'),
     path('projects/<int:id>/rate/', views.rate_project, name='rate_project'),
-    path('thank', views.thanks, name='thanks')
+    path('thank', views.thanks, name='thanks'),
+    path('prfile/',views.profile, name='profile'),
     
 ]

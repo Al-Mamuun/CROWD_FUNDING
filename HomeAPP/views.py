@@ -132,7 +132,7 @@ def signin(request):
 
             messages.success(request, f"Welcome, {username}!")
             # return redirect('home')  # Redirect to home page
-            return redirect('home')
+            return redirect('profile')
         else:
             messages.error(request, "Invalid username or password.")
             return redirect('signin')  # Redirect back to the sign-in page if failed
@@ -169,3 +169,7 @@ def signup(request):
 
 def thanks(request):
     return render(request, "Home/thank_you.html")
+
+
+def profile(request):
+    return render(request, "profile/profile.html")
