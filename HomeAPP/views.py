@@ -167,3 +167,5 @@ def signup(request):
     return render(request, "signup/signup.html")
 
 
+def thanks(request):
+    return render(request, "Home/thank_you.html")

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<style>
+    body {
+        background-color: #f0f0f0;
+    }
+   .nabila {
+    background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        margin: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease-in-out;
+        margin-top: 150px;
+ 
+   }
+</style>
+<body>
+    <div class="nabila">
+        <h1><strong>Thank For Your Donation ! 💘 </strong></h1>
+        <p style="font-size: larger;">All Rights Reserved.Made with ♥ by the Intelligence Hub</p>
+        <a href="{% url 'home' %}" class="btn btn-success">Back to Home</a>
+    </div>
+
+{% endblock%}
+
