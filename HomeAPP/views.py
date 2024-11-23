@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 from .forms import *
 
 # Home Page (Requires Login)
@@ -165,6 +166,10 @@ def signup(request):
         return redirect('signin')
     
     return render(request, "signup/signup.html")
+
+def signout(request):
+    logout(request)
+    return redirect('home')
 
 
 def thanks(request):
