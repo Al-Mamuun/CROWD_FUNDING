@@ -3,7 +3,6 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
 from .forms import *
 from .models import Project, FeatureProject, Profile, Donation, Comment, Rating
 
@@ -222,10 +221,6 @@ def signup(request):
         return redirect('signin')
 
     return render(request, "signup/signup.html")
-
-def signout(request):
-    logout(request)
-    return redirect('home')
 
 
 # Profile Dashboard
