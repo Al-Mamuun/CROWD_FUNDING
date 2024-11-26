@@ -9,7 +9,7 @@
             background-color: #f4f4f9;
             color: #333;
             text-align: center;
-            overflow-y: auto; /* Allows scrolling on the page */
+            overflow: hidden;
         }
         .container{
             margin-top: 100px;
@@ -79,6 +79,7 @@
                         Goal: ${{ project.goalAmount }}<br>
                         Collected: ${{ project.collectedAmount }}<br>
                         Status: {{ project.status }}
+                        {% comment %} Create Date: {{ project.createdAt}} {% endcomment %}
                     </div>
                 </li>
             {% empty %}
