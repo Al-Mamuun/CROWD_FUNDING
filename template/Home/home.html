@@ -212,34 +212,64 @@
     cursor: pointer;
   }
 
-  /* Footer */
+  /* Footer Styling */
   footer {
-    background-color: #333;
-    color: #fff;
+    background: linear-gradient(45deg, #222, #444); /* Darker gradient for footer */
+    color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
     padding: 40px 0;
-  }
+}
 
-  footer h5 {
-    color: #007bff;
-    font-weight: 700;
+footer h5 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #ffcc00; /* Golden yellow for headings */
     margin-bottom: 1rem;
-  }
+}
 
-  footer a {
-    color: #ddd;
+footer p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+footer a {
+    color: #aaa;
     text-decoration: none;
     transition: color 0.3s ease;
-  }
+}
 
-  footer a:hover {
-    color: #007bff;
-  }
+footer a:hover {
+    color: #ffcc00; /* Matches heading color for consistency */
+}
 
-  footer p {
-    margin-top: 20px;
-    font-size: 0.9rem;
-    color: #000000;
-  }
+footer ul {
+    list-style: none;
+    padding: 0;
+}
+
+footer ul li {
+    margin-bottom: 0.5rem;
+}
+
+footer ul li a {
+    font-size: 0.95rem;
+}
+
+footer hr {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+footer .btn {
+    color: #333;
+    background-color: #ffcc00;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+footer .btn:hover {
+    color: #fff;
+    background-color: #e0ac00;
+}
 </style>
 
 <!-- Hero Section -->
@@ -361,30 +391,33 @@
 <!-- Footer -->
 <footer class="bg-gradient text-white py-5">
   <div class="container">
-    <div class="row text-center text-md-start align-items-center">
-      <div class="col-md-4">
-        <h5>About Us</h5>
-        <p>Empowering communities through crowdfunding. Start your journey today!</p>
-        <a href="{% url 'upload' %}" class="btn btn-light btn-sm mt-3">Start a Campaign</a>
+      <div class="row text-center text-md-start align-items-center">
+          <!-- About Us Section -->
+          <div class="col-md-4 mb-4 mb-md-0">
+              <h5>About Us</h5>
+              <p>Empowering communities through crowdfunding. Start your journey today!</p>
+              <a href="{% url 'upload' %}" class="btn btn-light btn-sm mt-3">Start a Campaign</a>
+          </div>
+          <!-- Quick Links Section -->
+          <div class="col-md-4 mb-4 mb-md-0">
+              <h5>Quick Links</h5>
+              <ul>
+                  <li><a href="{% url 'home' %}">Home</a></li>
+                  <li><a href="{% url 'education' %}">Education</a></li>
+                  <li><a href="{% url 'medical' %}">Medical</a></li>
+                  <li><a href="{% url 'business' %}">Business</a></li>
+              </ul>
+          </div>
+          <!-- Contact Us Section -->
+          <div class="col-md-4">
+              <h5>Contact Us</h5>
+              <p>Email: <a href="mailto:almamun112020@gmail.com">IntelligenceHub@gmail.com</a></p>
+              <p>Phone: <a href="tel:+8801845196403">+88 01845196403</a></p>
+          </div>
       </div>
-      <div class="col-md-4">
-        <h5>Quick Links</h5>
-        <ul>
-          <li><a href="{% url 'home' %}">Home</a></li>
-          <li><a href="{% url 'education' %}">Education</a></li>
-          <li><a href="{% url 'medical' %}">Medical</a></li>
-          <li><a href="{% url 'business' %}">Business</a></li>
-        </ul>
-      </div>
-      <div class="col-md-4">
-        <h5>Contact Us</h5>
-        <p>Email: <a href="mailto:almamun112020@gmail.com">almamun112020@gmail.com</a></p>
-        <p>Phone: <a href="tel:+8801845196403">+88 01845196403</a></p>
-      </div>
-    </div>
-    <hr />
-    <p class="text-center mb-0">© 2024 Crowdfunding Platform. All Rights Reserved.Made <span class="text-danger">&hearts;</span> by the Team Intelligence Hub</p>
-
+      <hr />
+      <p class="text-center mb-0">© 2024 Crowdfunding Platform. All Rights Reserved. Made 
+          <span class="text-danger">&hearts;</span> by the Team Intelligence Hub</p>
   </div>
 </footer>
 

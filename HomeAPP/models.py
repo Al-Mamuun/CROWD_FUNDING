@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     bio = models.TextField(blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True,default='profile_pictures/profile.jpg')
     phn_number = models.CharField(max_length=15, blank=True, null=True)
@@ -38,17 +38,19 @@ class Project(models.Model):
 
     
 class Donation(models.Model):
-    profile = models.ForeignKey(Profile, related_name='donations', on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True)
+    # user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     title = models.CharField(max_length=200)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
-    project = models.ForeignKey(Project, related_name='donations', on_delete=models.CASCADE, null=True, blank=True)  # Optional link to projects
+    project = models.ForeignKey(Project, related_name='donations', on_delete=models.CASCADE, null=True, blank=True) 
     def __str__(self):
         return f"Donation of ${self.amount} on {self.created_at}"
 
 
 class Rating(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    # user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     stars = models.IntegerField()
     ratingDate = models.DateField(auto_now_add=True)
 
@@ -58,6 +60,7 @@ class Rating(models.Model):
 
 class Comment(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    # user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     content = models.TextField()
     commentDate = models.DateField(auto_now_add=True)
 

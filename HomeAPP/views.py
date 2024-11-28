@@ -42,7 +42,7 @@ def details_featureprojectlist(request, id):
 
 
 # Upload a New Project
-@login_required(login_url='signin')
+@login_required(login_url='user_signin')
 def upload_project(request):
     if request.method == 'POST':
         form = ProjectForm(request.POST, request.FILES)
@@ -60,14 +60,17 @@ def upload_project(request):
 
     return render(request, 'project/upload_project.html', {'form': form})
 
+# Check if the user is an admin
+def is_admin(user):
+    return user.is_staff  # Checks if the user is an admin
 
 # Update Existing Project
-@login_required(login_url='signin')
+@login_required(login_url='user_signin')
 def update_project(request, id):
     project = get_object_or_404(Project, pk=id)
     
-    # Ensure user is the project owner
-    if project.owner != request.user:
+    # Ensure user is either the project owner or an admin
+    if project.owner != request.user and not request.user.is_staff:
         messages.error(request, "You are not authorized to update this project.")
         return redirect('project_list')
     
@@ -84,13 +87,14 @@ def update_project(request, id):
     return render(request, 'project/update_project.html', {'form': form})
 
 
+
 # Delete Project
-@login_required(login_url='signin')
+@login_required(login_url='user_signin')
 def delete_p(request, id):
     project = get_object_or_404(Project, pk=id)
     
-    # Ensure user is the project owner
-    if project.owner != request.user:
+    # Ensure user is either the project owner or an admin
+    if project.owner != request.user and not request.user.is_staff:
         messages.error(request, "You cannot delete another user's project.")
         return redirect('project_list')
     
@@ -100,6 +104,7 @@ def delete_p(request, id):
         return redirect('project_list')
     
     return render(request, 'project/delete.html', {'project': project})
+
 
 
 # Donate to a Project
@@ -155,25 +160,51 @@ def rate_project(request, id):
         return redirect('details', id=project.id)
 
 
-# User Sign-In
-def signin(request):
+# Admin Sign-In
+def admin_signin(request):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
-        
-        if user:
-            auth_login(request, user)
-            if 'rememberMe' in request.POST:
-                request.session.set_expiry(1209600)  # 2 weeks session
-            messages.success(request, f"Welcome, {username}!")
-            return redirect('profile_dashboard')
-        else:
-            messages.error(request, "Invalid username or password.")
-            return redirect('signin')
-    
-    return render(request, "SignIn/signin.html")
 
+        if user and (user.is_staff or user.is_superuser):
+            auth_login(request, user)
+            messages.success(request, f"Welcome, Admin {username}!")
+            return redirect('/admin/')  # Redirect to Django admin panel
+        else:
+            messages.error(request, "Invalid admin credentials. Please check your username and password.")
+            return redirect('admin_signin')
+    
+    return render(request, "SignIn/admin_signin.html")
+
+
+# User Sign-In
+def user_signin(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+
+        if user:
+            if not (user.is_staff or user.is_superuser):  # Ensure user is not admin
+                auth_login(request, user)
+                
+                # Handle "Remember Me" functionality
+                if 'rememberMe' in request.POST:
+                    request.session.set_expiry(1209600)  # 2 weeks
+                else:
+                    request.session.set_expiry(0)  # Session ends when browser closes
+                
+                messages.success(request, f"Welcome, {username}!")
+                return redirect('profile_dashboard')  # Redirect to user dashboard
+            else:
+                messages.error(request, "You do not have access as a standard user.")
+                return redirect('user_signin')
+        else:
+            messages.error(request, "Invalid username or password. Please try again.")
+            return redirect('user_signin')
+
+    return render(request, "SignIn/user_signin.html")
 
 # User Sign-Up
 def signup(request):
@@ -218,7 +249,7 @@ def signup(request):
         # Log the user in
         messages.success(request, "Account created successfully!")
         auth_login(request, user)
-        return redirect('signin')
+        return redirect('user_signin')
 
     return render(request, "signup/signup.html")
 
@@ -229,12 +260,21 @@ def profile_dashboard(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
     projects = profile.projects.all()
     
-    # Add statistics to each project (like total donations)
+    # Add statistics to each project
     for project in projects:
         project.donations_count = project.donations.count()
-        project.donations_total = sum(donation.amount for donation in project.donations.all())
+        project.donations_total = project.donations.aggregate(total=models.Sum('amount'))['total'] or 0
     
-    return render(request, "profile/profile.html", {"profile": profile, "projects": projects})
+    # Fetch donations specifically related to the profile
+    donations = Donation.objects.filter(profile=profile)
+
+    return render(request, "profile/profile.html", {
+        "profile": profile,
+        "projects": projects,
+        "donations": donations,  # Pass donations to the template
+    })
+
+
 
 @login_required
 def delete_profile(request):
@@ -264,12 +304,24 @@ def delete_profile(request):
         print("Invalid request method.")  # Debugging line
         messages.error(request, "Invalid request method.")
         return redirect("profile_dashboard")
+    
 # User Sign-Out
 def signout(request):
-    logout(request)
-    messages.success(request, "You have been logged out successfully.")
-    return redirect('signin')
-
+    if request.user.is_authenticated:
+        # Check if the user is an admin (staff or superuser)
+        if request.user.is_staff or request.user.is_superuser:
+            # Admin user logs out
+            messages.success(request, "You have been logged out successfully, Admin!")
+            logout(request)  # Log out the admin
+            return redirect('home')  # Redirect to home page for admin
+        else:
+            # Regular user logs out
+            messages.success(request, "You have been logged out successfully.")
+            logout(request)  # Log out the regular user
+            return redirect('user_signin')  # Redirect to sign-in page for regular user
+    else:
+        # If the user is not authenticated, redirect to sign-in page
+        return redirect('user_signin')
 
 # Update Profile
 @login_required
@@ -302,3 +354,7 @@ def thank_you(request):
     return render(request, 'home/thank_you.html')
 
 
+def search_projects(request):
+    query = request.GET.get('query', '')
+    projects = Project.objects.filter(title__icontains=query) | Project.objects.filter(description__icontains=query) if query else []
+    return render(request, 'Home/search.html', {'projects': projects, 'query': query})
