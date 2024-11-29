@@ -212,64 +212,154 @@
     cursor: pointer;
   }
 
-  /* Footer Styling */
-  footer {
-    background: linear-gradient(45deg, #222, #444); /* Darker gradient for footer */
+/* Footer Styling */
+footer {
+    background: linear-gradient(45deg, #2f3640, #353b48); /* Dark gradient */
     color: #f8f9fa;
-    font-family: 'Arial', sans-serif;
     padding: 40px 0;
-}
+  }
 
-footer h5 {
+  footer h5 {
     font-size: 1.25rem;
     font-weight: bold;
-    color: #ffcc00; /* Golden yellow for headings */
+    color: #ff6b81; /* Pink for consistency */
     margin-bottom: 1rem;
-}
+  }
 
-footer p {
+  footer p,
+  footer ul li {
     font-size: 0.95rem;
     line-height: 1.6;
-}
+    color: #ddd;
+  }
 
-footer a {
-    color: #aaa;
+  footer a {
+    color: #ccc;
     text-decoration: none;
     transition: color 0.3s ease;
-}
+  }
 
-footer a:hover {
-    color: #ffcc00; /* Matches heading color for consistency */
-}
+  footer a:hover {
+    color: #ff6b81; /* Matches heading color for consistency */
+  }
 
-footer ul {
+  footer ul {
     list-style: none;
     padding: 0;
-}
+  }
 
-footer ul li {
+  footer ul li {
     margin-bottom: 0.5rem;
-}
+  }
 
-footer ul li a {
-    font-size: 0.95rem;
-}
-
-footer hr {
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-footer .btn {
+  footer .btn {
     color: #333;
-    background-color: #ffcc00;
+    background-color: #ff6b81;
     border: none;
     transition: all 0.3s ease;
+  }
+
+  footer .btn:hover {
+    color: #fff;
+    background-color: #e36c7a; /* Slightly darker pink */
+  }
+
+.about-us-container {
+      max-width: 1200px;
+      margin: 50px auto;
+      text-align: center;
+      padding: 20px;
+  }
+
+  .about-us-header h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: #444;
+      margin-bottom: 10px;
+  }
+
+  .about-us-header p {
+      font-size: 1.2rem;
+      color: #666;
+      margin-bottom: 40px;
+  }
+
+  .team {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      gap: 20px;
+  }
+
+  .team-member {
+      background: linear-gradient(145deg, #ffffff, #e6e6e6);
+      border-radius: 15px;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      width: 320px;
+      text-align: center;
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+
+  .team-member:hover {
+      transform: translateY(-10px);
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .team-member img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 4px solid #007bff;
+    margin-top: -0px; /* For overlapping effect */
 }
 
-footer .btn:hover {
-    color: #fff;
-    background-color: #e0ac00;
-}
+  .team-member h2 {
+      font-size: 1.8rem;
+      margin: 15px 0 5px;
+      color: #007bff;
+  }
+
+  .team-member h4 {
+      font-size: 1.1rem;
+      margin: 5px 0;
+      color: #555;
+      font-weight: 500;
+  }
+
+  .team-member p {
+      padding: 0 20px 20px;
+      color: #666;
+      font-size: 0.95rem;
+      line-height: 1.6;
+  }
+
+  .team-member .social-icons {
+      margin: 10px 0 20px;
+  }
+
+  .team-member .social-icons a {
+      color: #007bff;
+      margin: 0 10px;
+      text-decoration: none;
+      font-size: 1.5rem;
+      transition: color 0.3s ease-in-out;
+  }
+
+  .team-member .social-icons a:hover {
+      color: #0056b3;
+  }
+
+  @media screen and (max-width: 768px) {
+      .team {
+          flex-direction: column;
+          align-items: center;
+      }
+
+      .team-member {
+          width: 90%;
+      }
+  }
 </style>
 
 <!-- Hero Section -->
@@ -279,6 +369,18 @@ footer .btn:hover {
       <h1>Flood in Bangladesh</h1>
       <div class="donation" id="donateBtn">Click to donate now</div>
     </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="donationModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Donate to Flood Relief</h3>
+    <form action="{% url 'thank_you' %}" method="POST">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-gradient">Donate Now</button>
+    </form>
   </div>
 </div>
 
@@ -305,9 +407,9 @@ footer .btn:hover {
       <div class="col-md-4 mb-4">
         <div class="stat-item p-4 bg-white rounded shadow-sm h-100">
           <i class="bi bi-star display-5 text-primary"></i>
-          <h2 class="display-5 text-primary mt-3">150+</h2>
-          <p class="fs-5 fw-bold">Reviews</p>
-          <span class="text-muted">Feel free to give reviews.</span>
+          <h2 class="display-5 text-primary mt-3">5/5</h2>
+          <p class="fs-5 fw-bold">Success Rating</p>
+          <span class="text-muted">We're committed to making a difference.</span>
         </div>
       </div>
     </div>
@@ -388,50 +490,89 @@ footer .btn:hover {
   <a href="{% url 'upload' %}" class="btn btn-gradient">Create your own Project</a>
 </div>
 
-<!-- Footer -->
-<footer class="bg-gradient text-white py-5">
-  <div class="container">
-      <div class="row text-center text-md-start align-items-center">
-          <!-- About Us Section -->
-          <div class="col-md-4 mb-4 mb-md-0">
-              <h5>About Us</h5>
-              <p>Empowering communities through crowdfunding. Start your journey today!</p>
-              <a href="{% url 'upload' %}" class="btn btn-light btn-sm mt-3">Start a Campaign</a>
+
+
+<div class="about-us-container">
+  <div class="about-us-header">
+      <h1>Our Team</h1>
+      <p>We are a team of passionate individuals striving to make a difference with every project we undertake.</p>
+  </div>
+
+  <div class="team">
+      <!-- Team Member 1 -->
+      <div class="team-member">
+          <img src="{% static 'images/mamun.jpg' %}" alt="Team Member 1">
+          <h2>Abdullah Al-Mamun</h2>
+          <h4><i class="bi bi-person-check-fill"></i> Lead Developer</h4>
+          <p>Mamun is a backend specialist with expertise in Python and Django. He thrives on tackling challenging problems.</p>
+          <div class="social-icons">
+              <a href="https://github.com/Al-Mamuun" target="_blank"><i class="fab fa-github"></i></a>
+              <a href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin"></i></a>
+              <a href="http://facebook.com/AlMamuunn/" target="_blank"><i class="fab fa-facebook"></i></a>
           </div>
-          <!-- Quick Links Section -->
-          <div class="col-md-4 mb-4 mb-md-0">
-              <h5>Quick Links</h5>
-              <ul>
+      </div>
+
+      <!-- Team Member 2 -->
+      <div class="team-member">
+          <img src="{% static 'images/nabila.jpg' %}" alt="Team Member 2">
+          <h2>Anika Nawer Nabila</h2>
+          <h4>Frontend Designer</h4>
+          <p>Nabila excels at creating beautiful and user-friendly designs, ensuring an exceptional user experience.</p>
+          <div class="social-icons">
+              <a href="https://github.com/Nawer-Nabila" target="_blank"><i class="fab fa-github"></i></a>
+              <a href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin"></i></a>
+              <a href="http://facebook.com/nawer.nabila.7" target="_blank"><i class="fab fa-facebook"></i></a>
+          </div>
+      </div>
+
+      <!-- Team Member 3 -->
+      <div class="team-member">
+          <img src="{% static 'images/kayes.jpg' %}" alt="Team Member 3">
+          <h2>Kayes Ahemd Biplob</h2>
+          <h4>Project Manager</h4>
+          <p>Kayes ensures seamless communication and coordination to deliver projects on time.</p>
+          <div class="social-icons">
+              <a href="https://github.com/KayesBiplob" target="_blank"><i class="fab fa-github"></i></a>
+              <a href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin"></i></a>
+              <a href="http://facebook.com/kayesahamed.biplob" target="_blank"><i class="fab fa-facebook"></i></a>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <h5>About Us</h5>
+        <p>We are a team dedicated to raising funds for people who need assistance after the devastating floods in Bangladesh.</p>
+        <a href="{% url 'about'%}" class="btn" style="background: linear-gradient(to right, #ff7e5f, #feb47b); color: white;"">Learn More</a>
+      </div>
+      <div class="col-md-4">
+        <h5>Quick Links</h5>
+        <ul>
                   <li><a href="{% url 'home' %}">Home</a></li>
                   <li><a href="{% url 'education' %}">Education</a></li>
                   <li><a href="{% url 'medical' %}">Medical</a></li>
                   <li><a href="{% url 'business' %}">Business</a></li>
-              </ul>
-          </div>
-          <!-- Contact Us Section -->
-          <div class="col-md-4">
-              <h5>Contact Us</h5>
-              <p>Email: <a href="mailto:almamun112020@gmail.com">IntelligenceHub@gmail.com</a></p>
-              <p>Phone: <a href="tel:+8801845196403">+88 01845196403</a></p>
-          </div>
+        </ul>
       </div>
-      <hr />
-      <p class="text-center mb-0">© 2024 Crowdfunding Platform. All Rights Reserved. Made 
-          <span class="text-danger">&hearts;</span> by the Team Intelligence Hub</p>
+      <div class="col-md-4">
+        <h5>Contact</h5>
+        <ul>
+          <li>Email: <a href="mailto:almamun112020@gmail.com">IntelligenceHub@gmail.com</a></li>
+          <li>Phone: <a href="tel:+8801845196403">+88 01845196403</a></li>
+        </ul>
+      </div>
+    </div>
   </div>
+  <p class="text-center mb-0">© 2024 Crowdfunding Platform. All Rights Reserved. Made 
+    <span class="text-danger">&hearts;</span> by the Team Intelligence Hub</p>
 </footer>
 
-<!-- Modal -->
-<div id="donationModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h3>Donate to Flood Relief</h3>
-    <form action="{% url 'thank_you' %}" method="POST">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-gradient">Donate Now</button>
-    </form>
-  </div>
-</div>
+
+
 
 <script>
   var modal = document.getElementById("donationModal");

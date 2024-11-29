@@ -9,7 +9,7 @@ urlpatterns = [
     path('pass/', views.reset, name='reset'),
     path('projects/', views.project_list, name='project_list'),
     path('details/<int:id>/', views.details, name='details'),
-    path('upload/', views.upload_project, name='upload'),
+    path('upload/', views.create_project, name='upload'),
     path('update/<int:id>/', views.update_project, name='update'),
     path('delete/<int:id>/', views.delete_p, name='delete'),
     path('feature-projects/', views.featureprojectlist, name='feature_projects'),
@@ -23,5 +23,7 @@ urlpatterns = [
     path('thank-you/', views.thank_you, name='thank_you'),
     path("profile/delete/", views.delete_profile, name="delete_profile"),
     path('search/', views.search_projects, name='search_results'),
-     
+    path('about/', views.about, name='about'),
+    path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path('contact', views.contact_us, name='contact'),
 ]

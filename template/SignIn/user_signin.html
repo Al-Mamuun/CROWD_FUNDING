@@ -7,6 +7,18 @@
     
     <!-- Left Side: Sign-In Form -->
     <div class="col-md-6 p-5">
+      <!-- Crowdfunding Circular Logo -->
+      <div class="text-center">
+        <a href="/">
+          <img
+            src="{% static 'images/crowdfunding.jpg' %}"
+            alt="Crowdfunding Logo"
+            class="rounded-circle mx-auto"
+            style="width: 100px; height: 100px;"
+          />
+        </a>
+      </div>
+      <br>
       <h2 class="text-center mb-4">User Sign In</h2>
       <p class="text-center mb-4">Enter your credentials to log in.</p>
 
@@ -22,7 +34,7 @@
       <!-- Sign-In Form -->
       <form method="POST" action="{% url 'user_signin' %}">
         {% csrf_token %}
-        
+  
         <!-- Username Field -->
         <div class="mb-3">
           <label for="username" class="form-label">Username</label>
@@ -87,9 +99,8 @@
         <a href="https://www.google.com" class="btn btn-outline-dark mx-2" aria-label="Google" target="_blank">
             <i class="fab fa-google"></i> <!-- Google Logo -->
         </a>
-    </div>
+      </div>
     
-
       <!-- Additional Links -->
       <div class="text-center mt-3">
         <p>

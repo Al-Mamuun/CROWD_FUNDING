@@ -157,20 +157,35 @@ p {
 
 <!-- Donation Section -->
 <div class="card-container">
+    {% for message in messages %}
+        {% if 'donation' in message.tags %}
+            <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}">
+                <p>{{ message }}</p>
+            </div>
+        {% endif %}
+    {% endfor %}
+    
     <h3>Donate to this Project</h3>
     <form method="post" action="{% url 'donate_to_project' id=project.id %}">
         {% csrf_token %}
         <input type="number" name="amount" placeholder="Enter donation amount" required>
         <button type="submit">Donate</button>
     </form>
-    
     <div class="donation-amount">
         <p><strong>Total Donated:</strong> ${{ project.collectedAmount }}</p>
     </div>
 </div>
 
-<!-- Comments Section -->
+<!-- Comment Section -->
 <div class="card-container">
+    {% for message in messages %}
+        {% if 'comment' in message.tags %}
+            <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}">
+                <p>{{ message }}</p>
+            </div>
+        {% endif %}
+    {% endfor %}
+    
     <h3>Leave a Comment</h3>
     <form method="post" action="{% url 'comment_on_project' project.id %}">
         {% csrf_token %}
@@ -189,18 +204,24 @@ p {
 
 <!-- Rating Section -->
 <div class="card-container">
+    {% for message in messages %}
+        {% if 'rating' in message.tags %}
+            <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}">
+                <p>{{ message }}</p>
+            </div>
+        {% endif %}
+    {% endfor %}
+    
     <h3>Rate this Project</h3>
     <form method="post" action="{% url 'rate_project' project.id %}" id="rating-form">
         {% csrf_token %}
         <div id="stars" class="stars-container">
-            <!-- Star Icons -->
             <span data-value="1" class="star">★</span>
             <span data-value="2" class="star">★</span>
             <span data-value="3" class="star">★</span>
             <span data-value="4" class="star">★</span>
             <span data-value="5" class="star">★</span>
         </div>
-        <!-- Hidden Input to Store Selected Rating -->
         <input type="hidden" name="stars" id="rating-input" required>
         <button type="submit" class="btn btn-warning mt-3">Submit Rating</button>
     </form>
@@ -287,4 +308,3 @@ p {
 </script>
 
 {% endblock %}
-

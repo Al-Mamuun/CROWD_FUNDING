@@ -39,18 +39,18 @@ class Project(models.Model):
     
 class Donation(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True)
-    # user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     title = models.CharField(max_length=200)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
-    project = models.ForeignKey(Project, related_name='donations', on_delete=models.CASCADE, null=True, blank=True) 
+    project = models.ForeignKey(Project, related_name='donations', on_delete=models.CASCADE, null=True, blank=True)  # Optional link to projects
     def __str__(self):
         return f"Donation of ${self.amount} on {self.created_at}"
 
 
 class Rating(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    # user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     stars = models.IntegerField()
     ratingDate = models.DateField(auto_now_add=True)
 
@@ -60,7 +60,7 @@ class Rating(models.Model):
 
 class Comment(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    # user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     content = models.TextField()
     commentDate = models.DateField(auto_now_add=True)
 

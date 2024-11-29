@@ -5,7 +5,8 @@ from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
 from .forms import *
 from .models import Project, FeatureProject, Profile, Donation, Comment, Rating
-
+from django.core.mail import send_mail
+from django.conf import settings
 
 # Home Page (Requires Login)
 def home(request):
@@ -43,12 +44,12 @@ def details_featureprojectlist(request, id):
 
 # Upload a New Project
 @login_required(login_url='user_signin')
-def upload_project(request):
+def create_project(request):
     if request.method == 'POST':
         form = ProjectForm(request.POST, request.FILES)
         if form.is_valid():
             project = form.save(commit=False)
-            profile, created = Profile.objects.get_or_create(user=request.user)
+            profile= Profile.objects.get_or_create(user=request.user)
             project.profile = profile
             project.save()
             messages.success(request, "Project uploaded successfully!")
@@ -107,7 +108,8 @@ def delete_p(request, id):
 
 
 
-# Donate to a Project
+
+# Donate to Project
 def donate_to_project(request, id):
     project = get_object_or_404(Project, id=id)
     
@@ -119,27 +121,27 @@ def donate_to_project(request, id):
                 Donation.objects.create(profile=profile, amount=amount, title=f"Donation to {project.title}", project=project)
                 project.collectedAmount += amount
                 project.save()
-                messages.success(request, "Thank you for your donation!")
+                messages.success(request, "Thank you for your donation!", extra_tags="donation")
             else:
-                messages.error(request, "Please enter a valid amount.")
+                messages.error(request, "Please enter a valid amount.", extra_tags="donation")
         except (ValueError, TypeError):
-            messages.error(request, "Invalid amount entered.")
+            messages.error(request, "Invalid amount entered.", extra_tags="donation")
         
         return redirect('details', id=project.id)
     
     return redirect('details', id=project.id)
 
 
-# Comment on a Project
+# Comment on Project
 def comment_on_project(request, id):
     project = get_object_or_404(Project, id=id)
     if request.method == 'POST':
         content = request.POST.get('content')
         if content:
             Comment.objects.create(project=project, content=content)
-            messages.success(request, "Comment added!")
+            messages.success(request, "Comment added!", extra_tags="comment")
         else:
-            messages.error(request, "Comment cannot be empty.")
+            messages.error(request, "Comment cannot be empty.", extra_tags="comment")
         return redirect('details', id=project.id)
 
 
@@ -151,11 +153,11 @@ def rate_project(request, id):
             stars = int(request.POST.get('stars'))
             if 1 <= stars <= 5:
                 Rating.objects.create(project=project, stars=stars)
-                messages.success(request, "Rating submitted successfully!")
+                messages.success(request, "Rating submitted successfully!", extra_tags="rating")
             else:
-                messages.error(request, "Rating must be between 1 and 5.")
+                messages.error(request, "Rating must be between 1 and 5.", extra_tags="rating")
         except (ValueError, TypeError):
-            messages.error(request, "Invalid rating value.")
+            messages.error(request, "Invalid rating value.", extra_tags="rating")
         
         return redirect('details', id=project.id)
 
@@ -174,9 +176,20 @@ def admin_signin(request):
         else:
             messages.error(request, "Invalid admin credentials. Please check your username and password.")
             return redirect('admin_signin')
-    
+
+    # Log out admin if they return to the sign-in page or visit non-admin pages
+    if request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser):
+        logout(request)
+
     return render(request, "SignIn/admin_signin.html")
 
+
+@login_required
+def admin_dashboard(request):
+    if not request.user.is_staff and not request.user.is_superuser:
+        # Redirect to home or show an error if the user is not an admin
+        return redirect('home')
+    return render(request, 'profile/admin_profile.html')
 
 # User Sign-In
 def user_signin(request):
@@ -278,33 +291,22 @@ def profile_dashboard(request):
 
 @login_required
 def delete_profile(request):
-    print(f"Request method: {request.method}")  # Debugging line
     if request.method == "POST":
-        try:
-            user = request.user
-            print(f"User: {user}")  # Debugging line
-            
-            # Deleting the user
-            user.delete()
-            print("User deleted successfully")  # Debugging line
-            
-            # Log out the user after account deletion
-            logout(request)
-            
-            # Provide success message
-            messages.success(request, "Your account has been deleted successfully.")
-            
-            # Redirect to the signup page or homepage
-            return redirect("signup")
-        except Exception as e:
-            print(f"Error deleting profile: {e}")  # Debugging line
-            messages.error(request, "An error occurred while trying to delete your account.")
-            return redirect("profile_dashboard")
-    else:
-        print("Invalid request method.")  # Debugging line
-        messages.error(request, "Invalid request method.")
-        return redirect("profile_dashboard")
-    
+        # Get the user's profile
+        profile = request.user.profile  # Assuming a one-to-one relationship exists
+
+        # Delete associated projects and donations if necessary
+        profile.projects.all().delete()  # Delete all related projects
+        Donation.objects.filter(profile=profile).delete()  # Delete related donations
+
+        # Optionally delete the user account
+        user = request.user
+        user.delete()
+
+        messages.success(request, "Your profile and account have been successfully deleted.")
+        return redirect("home")  # Redirect to the homepage or another appropriate URL
+
+    return render(request, "profile/delete_profile.html")
 # User Sign-Out
 def signout(request):
     if request.user.is_authenticated:
@@ -358,3 +360,43 @@ def search_projects(request):
     query = request.GET.get('query', '')
     projects = Project.objects.filter(title__icontains=query) | Project.objects.filter(description__icontains=query) if query else []
     return render(request, 'Home/search.html', {'projects': projects, 'query': query})
+
+def about(request):
+    return render(request, 'Home/about.html')
+
+def contact_us(request):
+    if request.method == 'POST':
+        # Fetching form data
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone', '')  # Optional
+        message = request.POST.get('message')
+
+        # Simple server-side validation
+        if not name or not email or not message:
+            messages.error(request, "Please fill in all required fields.")
+            return redirect('contact_us')  # Replace with your URL name for the contact page
+
+        # Process form (e.g., send an email or save to database)
+        try:
+            # Sending an email (optional)
+            subject = f"New Contact Us Message from {name}"
+            email_body = (
+                f"Name: {name}\n"
+                f"Email: {email}\n"
+                f"Phone: {phone}\n"
+                f"Message:\n{message}\n"
+            )
+            admin_email = settings.DEFAULT_CONTACT_EMAIL  # Replace with your email setting
+            send_mail(subject, email_body, email, [admin_email])
+
+            # Add success message
+            messages.success(request, "Thank you for contacting us! We'll get back to you soon.")
+            return redirect('contact_us')  # Redirect back to the contact page (or another page)
+
+        except Exception as e:
+            # Log the error and show a generic error message
+            print(f"Error sending email: {e}")
+            messages.error(request, "There was an issue processing your request. Please try again later.")
+
+    return render(request, 'Home/contact_us.html')  # Use the template you created
