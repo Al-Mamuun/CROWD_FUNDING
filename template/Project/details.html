@@ -4,7 +4,7 @@
 
 {% block content %}
 <style>
-   /* Shared Card Styling */
+   
    .card-container {
     max-width: 700px;
     margin: 20px auto;
@@ -56,7 +56,7 @@ body {
     background-color: #f4f4f9;
     color: #333;
     text-align: center;
-    overflow-y: auto; /* Allows scrolling on the page */
+    overflow-y: auto; 
     margin-top: 100px; 
 }
 
@@ -121,7 +121,7 @@ p {
 }
 .danger-btn {
     padding: 10px 20px;
-    background-color: #dc3545;  /* Red color for danger */
+    background-color: #dc3545;  
     color: white;
     font-size: 16px;
     border-radius: 5px;
@@ -131,11 +131,11 @@ p {
 }
 
 .danger-btn:hover {
-    background-color: #c82333; /* Darker red on hover */
+    background-color: #c82333;
 }
 
 .danger-btn:active {
-    background-color: #a71d2a; /* Even darker red when clicked */
+    background-color: #a71d2a; 
 }
 </style>
 
@@ -242,16 +242,16 @@ p {
     }
 
     .star {
-        color: #ccc; /* Default color for stars */
+        color: #ccc; 
         transition: color 0.3s ease;
     }
 
     .star.selected {
-        color: #ffc107; /* Highlight color for selected stars */
+        color: #ffc107; 
     }
 
     .star.hovered {
-        color: #ffc107; /* Temporary highlight when hovering */
+        color: #ffc107; 
     }
 </style>
 
@@ -262,36 +262,36 @@ p {
 
         let currentRating = 0;
 
-        // Load the current rating if already submitted
+        
         if (ratingInput.value) {
             currentRating = parseInt(ratingInput.value);
             highlightStars(currentRating);
         }
 
-        // Add event listeners to stars
+        
         stars.forEach(star => {
             star.addEventListener("click", function () {
                 const value = this.getAttribute("data-value");
                 ratingInput.value = value;
                 currentRating = parseInt(value);
 
-                // Update the UI with the selected rating
+               
                 highlightStars(currentRating);
             });
 
             star.addEventListener("mouseover", function () {
-                // Temporarily highlight stars on hover
+                
                 const value = this.getAttribute("data-value");
                 highlightStars(value);
             });
 
             star.addEventListener("mouseleave", function () {
-                // Reset hover effect
+                
                 highlightStars(currentRating);
             });
         });
 
-        // Function to highlight stars based on the rating value
+        
         function highlightStars(value) {
             stars.forEach(star => {
                 const starValue = parseInt(star.getAttribute("data-value"));

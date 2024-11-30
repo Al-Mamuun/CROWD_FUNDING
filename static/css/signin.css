@@ -43,7 +43,7 @@ h2 {
     object-fit: cover;
     height: 100vh;
     width: 100%;
-    filter: grayscale(60%); /* Apply grayscale filter */
+    filter: grayscale(60%);
   }
   
   @media (max-width: 768px) {

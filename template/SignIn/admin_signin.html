@@ -7,12 +7,12 @@
 <div class="container-fluid">
   <div class="row align-items-center min-vh-100">
     
-    <!-- Left Side: Sign-In Form -->
+   
     <div class="col-md-6 p-5 d-flex flex-column justify-content-center" style="min-height: 80vh;">
       <h2 class="text-center mb-4">Admin Sign In</h2>
       <p class="text-center mb-4">Enter your credentials to log in.</p>
 
-      <!-- Display error or success messages -->
+    
       {% if messages %}
         <div class="alert alert-info">
           {% for message in messages %}
@@ -21,11 +21,11 @@
         </div>
       {% endif %}
       
-      <!-- Sign-In Form -->
+    
       <form method="POST" action="{% url 'admin_signin' %}">
         {% csrf_token %}
         
-        <!-- Username Field -->
+        
         <div class="mb-3">
           <label for="username" class="form-label">Username</label>
           <input 

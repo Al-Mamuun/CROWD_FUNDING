@@ -1,5 +1,5 @@
 
-/* Full page background with gradient */
+
 html, body {
   height: 100%;
   margin: 0;
@@ -10,7 +10,7 @@ html, body {
 
 
 .main-content-wrapper {
-  height: calc(100vh - 70px); /* Adjust height minus navbar height */
+  height: calc(100vh - 70px); 
   display: flex;
   justify-content: center;
   align-items: center;

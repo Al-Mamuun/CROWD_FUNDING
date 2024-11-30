@@ -5,5 +5,5 @@ class HomeAppConfig(AppConfig):
     name = 'HomeAPP'
 
     def ready(self):
-        import HomeAPP.signals  # Replace HomeAPP with your app name
+        import HomeAPP.signals 
         

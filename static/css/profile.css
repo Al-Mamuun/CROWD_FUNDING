@@ -1,7 +1,7 @@
 body {
     font-family: Arial, sans-serif;
-    margin-top: 70px; /* Account for fixed navbar */
-    overflow-y: auto; /* Allows scrolling on the page */
+    margin-top: 70px; 
+    overflow-y: auto; 
 }
 
 .navbar {
@@ -39,15 +39,15 @@ body {
     border-radius: 20px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     padding: 20px;
-    text-align: center; /* Center the content inside the card */
+    text-align: center;
 }
 
 .profile-image {
-    border-radius: 50%; /* Make the image rounded */
-    width: 150px; /* Set the desired width */
-    height: 150px; /* Set the desired height */
-    object-fit: cover; /* Ensure the image covers the entire area */
-    margin-bottom: 20px; /* Space between the image and the name */
+    border-radius: 50%; 
+    width: 150px; 
+    height: 150px; 
+    object-fit: cover; 
+    margin-bottom: 20px; 
 }
 
 .profile-name {

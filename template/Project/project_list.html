@@ -10,7 +10,7 @@
         background-color: #f4f4f9;
         color: #333;
         text-align: center;
-        overflow-y: auto; /* Allows scrolling on the page */
+        overflow-y: auto;
     }
     .container {
         margin-top: 100px;
@@ -22,8 +22,7 @@
     }
 
     .project-container {
-        max-height: 70vh; /* Limit the height to make it scrollable */
-        /* overflow-y: auto; */
+        max-height: 70vh; 
         padding: 0 10px;
     }
 
@@ -34,7 +33,6 @@
         margin: 0 auto;
     }
 
-    /* Specific styles for the list items */
     ul li.List {
         background-color: #ffffff;
         border: 1px solid #ddd;
@@ -71,7 +69,7 @@
     <div class="project-container">
         <ul>
             {% for project in projects %}
-                <li class="List"> <!-- Ensure 'List' class is applied -->
+                <li class="List"> 
                     <img src="{{ project.image.url }}" alt="PROJECT" class="project-image">
                     <div class="project-details">
                         <strong>
@@ -80,7 +78,7 @@
                         Goal: ${{ project.goalAmount }}<br>
                         Collected: ${{ project.collectedAmount }}<br>
                         Status: {{ project.status }}
-                        {% comment %} Create Date: {{ project.createdAt}} {% endcomment %}
+                        Create Date: {{ project.createdAt}}
                     </div>
                 </li>
             {% empty %}

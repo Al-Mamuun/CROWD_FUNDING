@@ -23,7 +23,7 @@
         }
 
         h2 {
-            color: #e74c3c; /* Red for delete confirmation */
+            color: #e74c3c;
             margin-bottom: 20px;
             font-size: 28px;
         }
@@ -52,24 +52,24 @@
         }
 
         .delete-button {
-            background-color: #e74c3c; /* Red for delete */
+            background-color: #e74c3c; 
             color: white;
             border: none;
         }
 
         .delete-button:hover {
-            background-color: #c0392b; /* Darker red on hover */
+            background-color: #c0392b; 
         }
 
         .cancel-button {
-            background-color: #28a745; /* Green for cancel */
+            background-color: #28a745; 
             color: white;
             text-decoration: none;
             border: none;
         }
 
         .cancel-button:hover {
-            background-color: #218838; /* Darker green on hover */
+            background-color: #218838; 
         }
     </style>
 
@@ -77,10 +77,10 @@
         <h2>Are you sure you want to delete this project?</h2>
         <p class="delete-message">Once deleted, this action cannot be undone.</p>
 
-        <!-- Display the project name or any other info if needed -->
+        
         <p class="delete-message"><strong>{{ project.name }}</strong></p> 
 
-        <!-- Confirmation buttons -->
+        
         <div class="delete-buttons">
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
