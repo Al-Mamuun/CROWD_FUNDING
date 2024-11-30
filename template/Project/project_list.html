@@ -75,10 +75,10 @@
                         <strong>
                             <a href="{% url 'details' project.id %}">{{ project.title }}</a>
                         </strong><br>
-                        Goal: ${{ project.goalAmount }}<br>
-                        Collected: ${{ project.collectedAmount }}<br>
-                        Status: {{ project.status }}
-                        Create Date: {{ project.createdAt}}
+                        <strong>Goal: </strong>${{ project.goalAmount }}<br>
+                        <strong>Collected: </strong>${{ project.collectedAmount }}<br>
+                        <strong>Status: </strong>{{ project.status }}<br>
+                        <strong>Create Date: </strong>{{ project.createdAt}}
                     </div>
                 </li>
             {% empty %}
