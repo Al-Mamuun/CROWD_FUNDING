@@ -10,7 +10,17 @@ from django.conf import settings
 
 # Home Page (Requires Login)
 def home(request):
-    return render(request, "home/home.html")
+    # Example Models: Donation, Project, Review
+    total_donors = Donation.objects.count()  # Count unique donors by email
+    total_projects = Project.objects.count()  # Count all projects
+    success_rating = 5  # Count all reviews
+
+    context = {
+        "total_donors": total_donors,
+        "total_projects": total_projects,
+        "success_rating": success_rating,
+    }
+    return render(request, "home/home.html", context)
 
 
 # Reset Page
@@ -49,8 +59,8 @@ def create_project(request):
         form = ProjectForm(request.POST, request.FILES)
         if form.is_valid():
             project = form.save(commit=False)
-            profile= Profile.objects.get_or_create(user=request.user)
-            project.profile = profile
+            profile, _ = Profile.objects.get_or_create(user=request.user)  # Unpack the tuple
+            project.profile = profile  # Assign only the Profile instance
             project.save()
             messages.success(request, "Project uploaded successfully!")
             return redirect('project_list')
@@ -60,6 +70,7 @@ def create_project(request):
         form = ProjectForm()
 
     return render(request, 'project/upload_project.html', {'form': form})
+
 
 # Check if the user is an admin
 def is_admin(user):

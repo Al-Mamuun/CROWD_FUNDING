@@ -285,81 +285,84 @@ footer {
   }
 
   .team {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
-      gap: 20px;
-  }
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center align all members */
+    gap: 20px; /* Uniform spacing between members */
+    padding: 20px; /* Add padding around the container */
+}
 
-  .team-member {
-      background: linear-gradient(145deg, #ffffff, #e6e6e6);
-      border-radius: 15px;
-      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-      width: 320px;
-      text-align: center;
-      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  }
+.team-member {
+    background: linear-gradient(145deg, #ffffff, #e6e6e6);
+    border-radius: 15px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: calc(25% - 20px); /* Make members fit within the row */
+    max-width: 300px; /* Ensure consistent size */
+    text-align: center;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
 
-  .team-member:hover {
-      transform: translateY(-10px);
-      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-  }
+.team-member:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+}
 
-  .team-member img {
+.team-member img {
     width: 150px;
     height: 150px;
     border-radius: 50%;
     border: 4px solid #007bff;
-    margin-top: -0px; /* For overlapping effect */
+    margin-top: -0px;
 }
 
-  .team-member h2 {
-      font-size: 1.8rem;
-      margin: 15px 0 5px;
-      color: #007bff;
-  }
+.team-member h2 {
+    font-size: 1.3rem;
+    margin: 15px 0 5px;
+    color: #007bff;
+}
 
-  .team-member h4 {
-      font-size: 1.1rem;
-      margin: 5px 0;
-      color: #555;
-      font-weight: 500;
-  }
+.team-member h4 {
+    font-size: 1.1rem;
+    margin: 5px 0;
+    color: #555;
+    font-weight: 500;
+}
 
-  .team-member p {
-      padding: 0 20px 20px;
-      color: #666;
-      font-size: 0.95rem;
-      line-height: 1.6;
-  }
+.team-member p {
+    padding: 0 20px 20px;
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
 
-  .team-member .social-icons {
-      margin: 10px 0 20px;
-  }
+.team-member .social-icons {
+    margin: 10px 0 20px;
+}
 
-  .team-member .social-icons a {
-      color: #007bff;
-      margin: 0 10px;
-      text-decoration: none;
-      font-size: 1.5rem;
-      transition: color 0.3s ease-in-out;
-  }
+.team-member .social-icons a {
+    color: #007bff;
+    margin: 0 10px;
+    text-decoration: none;
+    font-size: 1.5rem;
+    transition: color 0.3s ease-in-out;
+}
 
-  .team-member .social-icons a:hover {
-      color: #0056b3;
-  }
+.team-member .social-icons a:hover {
+    color: #0056b3;
+}
 
-  @media screen and (max-width: 768px) {
-      .team {
-          flex-direction: column;
-          align-items: center;
-      }
+@media screen and (max-width: 768px) {
+    .team {
+        flex-direction: column;
+        align-items: center;
+    }
 
-      .team-member {
-          width: 90%;
-      }
-  }
+    .team-member {
+        width: 90%;
+    }
+}
+
 </style>
 
 <!-- Hero Section -->
@@ -384,6 +387,7 @@ footer {
   </div>
 </div>
 
+
 <!-- Stats Section -->
 <div class="stats-section py-5 bg-light">
   <div class="container">
@@ -391,7 +395,7 @@ footer {
       <div class="col-md-4 mb-4">
         <div class="stat-item p-4 bg-white rounded shadow-sm h-100">
           <i class="bi bi-people display-5 text-primary"></i>
-          <h2 class="display-5 text-primary mt-3">1000+</h2>
+          <h2 class="display-5 text-primary mt-3">{{ total_donors }}+</h2>
           <p class="fs-5 fw-bold">Donors</p>
           <span class="text-muted">Everyone is welcome to donate.</span>
         </div>
@@ -399,15 +403,16 @@ footer {
       <div class="col-md-4 mb-4">
         <div class="stat-item p-4 bg-white rounded shadow-sm h-100">
           <i class="bi bi-box-seam display-5 text-primary"></i>
-          <h2 class="display-5 text-primary mt-3">240+</h2>
+          <h2 class="display-5 text-primary mt-3">{{ total_projects }}+</h2>
           <p class="fs-5 fw-bold">Projects</p>
           <span class="text-muted">Various projects waiting for your help.</span>
         </div>
       </div>
+
       <div class="col-md-4 mb-4">
         <div class="stat-item p-4 bg-white rounded shadow-sm h-100">
           <i class="bi bi-star display-5 text-primary"></i>
-          <h2 class="display-5 text-primary mt-3">5/5</h2>
+          <h2 class="display-5 text-primary mt-3">{{ success_rating }}/5</h2>
           <p class="fs-5 fw-bold">Success Rating</p>
           <span class="text-muted">We're committed to making a difference.</span>
         </div>
@@ -529,14 +534,29 @@ footer {
       <div class="team-member">
           <img src="{% static 'images/kayes.jpg' %}" alt="Team Member 3">
           <h2>Kayes Ahemd Biplob</h2>
-          <h4>Project Manager</h4>
-          <p>Kayes ensures seamless communication and coordination to deliver projects on time.</p>
+          <h4>Frontend Designer</h4>
+          <p>Kayes excels at creating beautiful and user-friendly designs, ensuring an exceptional user experience.</p>
           <div class="social-icons">
               <a href="https://github.com/KayesBiplob" target="_blank"><i class="fab fa-github"></i></a>
               <a href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin"></i></a>
               <a href="http://facebook.com/kayesahamed.biplob" target="_blank"><i class="fab fa-facebook"></i></a>
           </div>
       </div>
+
+
+      <!-- Team Member 4 -->
+      <div class="team-member">
+        <img src="{% static 'images/zahin.jpg' %}" alt="Team Member 3">
+        <h2>Mashrura Zahin</h2>
+        <h4>Project Manager</h4>
+        <p>Mashrura ensures seamless communication and coordination to deliver projects on time.</p>
+        <div class="social-icons">
+            <a href="https://github.com/" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin"></i></a>
+            <a href="http://facebook.com/" target="_blank"><i class="fab fa-facebook"></i></a>
+        </div>
+    </div>
+    
   </div>
 </div>
 
