@@ -285,6 +285,7 @@ footer {
   }
 
   .team {
+<<<<<<< HEAD
     display: flex;
     flex-wrap: wrap;
     justify-content: center; /* Center align all members */
@@ -302,6 +303,23 @@ footer {
     text-align: center;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
+=======
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      gap: 12px;
+  }
+
+  .team-member {
+      background: linear-gradient(145deg, #ffffff, #e6e6e6);
+      border-radius: 15px;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      width: 280px;
+      text-align: center;
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+>>>>>>> 7394f8a5cdb364e2241fb45fe051cd767324c386
 
 .team-member:hover {
     transform: translateY(-10px);
@@ -542,21 +560,18 @@ footer {
               <a href="http://facebook.com/kayesahamed.biplob" target="_blank"><i class="fab fa-facebook"></i></a>
           </div>
       </div>
-
-
       <!-- Team Member 4 -->
       <div class="team-member">
-        <img src="{% static 'images/zahin.jpg' %}" alt="Team Member 3">
+        <img src="{% static 'images/zahin.jpg' %}" alt="Team Member 4">
         <h2>Mashrura Zahin</h2>
         <h4>Project Manager</h4>
         <p>Mashrura ensures seamless communication and coordination to deliver projects on time.</p>
         <div class="social-icons">
-            <a href="https://github.com/" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
             <a href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin"></i></a>
-            <a href="http://facebook.com/" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="http://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
         </div>
     </div>
-    
   </div>
 </div>
 
