@@ -117,9 +117,6 @@ def delete_p(request, id):
     
     return render(request, 'project/delete.html', {'project': project})
 
-
-
-
 # Donate to Project
 def donate_to_project(request, id):
     project = get_object_or_404(Project, id=id)
@@ -373,7 +370,7 @@ def search_projects(request):
     return render(request, 'Home/search.html', {'projects': projects, 'query': query})
 
 def about(request):
-    return render(request, 'Home/about.html')
+    return render(request, 'our_info/about.html')
 
 def contact_us(request):
     if request.method == 'POST':
@@ -410,4 +407,4 @@ def contact_us(request):
             print(f"Error sending email: {e}")
             messages.error(request, "There was an issue processing your request. Please try again later.")
 
-    return render(request, 'Home/contact_us.html')  # Use the template you created
+    return render(request, 'our_info/contact_us.html')  # Use the template you created
