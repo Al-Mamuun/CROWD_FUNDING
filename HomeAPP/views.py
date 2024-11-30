@@ -270,7 +270,7 @@ def signup(request):
         # Log the user in
         messages.success(request, "Account created successfully!")
         auth_login(request, user)
-        return redirect('user_signin')
+        return redirect('profile_dashboard')
 
     return render(request, "signup/signup.html")
 

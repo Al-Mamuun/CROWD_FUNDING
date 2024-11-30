@@ -20,7 +20,7 @@ class Project(models.Model):
     description = models.TextField()
     goalAmount = models.FloatField()
     collectedAmount = models.FloatField(default=0.0)
-    date_created = models.DateTimeField(auto_now_add=True)
+    createdAt = models.DateTimeField(auto_now_add=True)
     startDate = models.DateField()
     endDate = models.DateField()
     image = models.ImageField(upload_to='projects/', default='projects/default.jpg')
@@ -42,7 +42,7 @@ class Donation(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     title = models.CharField(max_length=200)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    date = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     project = models.ForeignKey(Project, related_name='donations', on_delete=models.CASCADE, null=True, blank=True)  # Optional link to projects
     def __str__(self):
         return f"Donation of ${self.amount} on {self.created_at}"
@@ -52,7 +52,7 @@ class Rating(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     stars = models.IntegerField()
-    date = models.DateField(auto_now_add=True)
+    ratingDate = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return f"Rating of {self.stars} stars for {self.project.title}"
@@ -66,7 +66,6 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment on {self.project.title} - {self.content[:30]}"
-
 
 class FeatureProject(models.Model):
     title = models.CharField(max_length=255)
